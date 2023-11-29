@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using RMASystem.BL;
 using RMASystem.DAL;
 
@@ -11,22 +13,35 @@ namespace RMASystem.APIs.Controllers
     public class RetailCustomersController : ControllerBase
     {
         private readonly IRetailCustomersManager _RetailCustomersManger;
-        private readonly IReceivedRequestsManager _RecivedRequestsManager;
         private readonly ILogger<RetailCustomersController> _logger;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RetailCustomersController(IRetailCustomersManager RetailCustomersManger, ILogger<RetailCustomersController> logger, IReceivedRequestsManager receivedRequestsManager, UserManager<ApplicationUser> userManager)
+        public RetailCustomersController(IRetailCustomersManager RetailCustomersManger, ILogger<RetailCustomersController> logger)
         {
             _RetailCustomersManger = RetailCustomersManger;
             _logger = logger;
-            _RecivedRequestsManager = receivedRequestsManager;
-            _userManager = userManager;
         }
-        //[HttpGet]
-        //public ActionResult<List<RetailCustomers>> GetAll()
+        //[HttpGet("GetLoyaltyPoints")]
+        //public IActionResult GetLoyaltyPoints(int cusId, string phoneNo)
         //{
-        //    return _RetailCustomersRepo.GetAll().ToList();
+        //    var results = _context.YourDbContext.FromSqlRaw("EXEC GetRetailCustomerLoyaltyPoints @CusID, @PhoneNo",
+        //                        new SqlParameter("@CusID", cusId),
+        //                        new SqlParameter("@PhoneNo", phoneNo))
+        //                        .FirstOrDefault();
+
+        //    if (results == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var loyaltyPointsDto = new LoyaltyPointsDto
+        //    {
+        //        PointsBalance = results.PointsBalance,
+        //        PointsAmount = results.PointsAmount
+        //    };
+
+        //    return Ok(loyaltyPointsDto);
         //}
+
 
         [HttpPut]
         [Authorize]

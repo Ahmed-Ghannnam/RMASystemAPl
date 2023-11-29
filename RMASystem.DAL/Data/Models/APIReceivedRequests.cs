@@ -1,4 +1,6 @@
-﻿namespace RMASystem.DAL
+﻿
+namespace RMASystem.DAL
+
 {
     public class APIReceivedRequests
     {
