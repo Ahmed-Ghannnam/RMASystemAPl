@@ -16,21 +16,20 @@ namespace RMASystem.APIs
             _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext context, UserManager<ApplicationUser> userManager)
+        public async Task InvokeAsync(HttpContext context)
         {
             
-                //ApplicationUser? userFromDb = await userManager.GetUserAsync(context.User);
-                var UserNamee = context.User.FindFirstValue(ClaimTypes.Name);
+                var UserNameFromClaims = context.User.FindFirstValue(ClaimTypes.Name);
 
 
-            // for this error message Unable to resolve service from root(middelware), you need to do that instead of injecting in constructor or Create obj
+            // for this error message Unable to resolve service from root(middelware), you have to use lines of code below  instead of injecting in constructor or Create obj
             using (var scope = context.RequestServices.CreateScope())
             {
                 var _apiRequest = scope.ServiceProvider.GetRequiredService<APIReceivedRequests>();
                 var _receivedRequestsManager = scope.ServiceProvider.GetRequiredService<IReceivedRequestsManager>();
 
                 
-                _apiRequest.UserName = UserNamee ?? string.Empty;
+                _apiRequest.UserName = UserNameFromClaims ?? string.Empty;
                 _apiRequest.ReceivedDate = DateTime.Now;
                 _apiRequest.ApiUrl = context.Request.Path;
                 _apiRequest.RequestMethod = context.Request.Method;
@@ -47,7 +46,6 @@ namespace RMASystem.APIs
                 }
 
                 _receivedRequestsManager.Add(_apiRequest);
-              //  context.Items["API_REQUEST_LOG"] = _apiRequest;
             }
 
             await _next(context);

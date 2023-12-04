@@ -15,33 +15,11 @@ namespace RMASystem.APIs.Controllers
         private readonly IRetailCustomersManager _RetailCustomersManger;
         private readonly ILogger<RetailCustomersController> _logger;
 
-        public RetailCustomersController(IRetailCustomersManager RetailCustomersManger, ILogger<RetailCustomersController> logger)
+        public RetailCustomersController(IRetailCustomersManager RetailCustomersManger, ILogger<RetailCustomersController> logger, RMAContext context)
         {
             _RetailCustomersManger = RetailCustomersManger;
             _logger = logger;
         }
-        //[HttpGet("GetLoyaltyPoints")]
-        //public IActionResult GetLoyaltyPoints(int cusId, string phoneNo)
-        //{
-        //    var results = _context.YourDbContext.FromSqlRaw("EXEC GetRetailCustomerLoyaltyPoints @CusID, @PhoneNo",
-        //                        new SqlParameter("@CusID", cusId),
-        //                        new SqlParameter("@PhoneNo", phoneNo))
-        //                        .FirstOrDefault();
-
-        //    if (results == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var loyaltyPointsDto = new LoyaltyPointsDto
-        //    {
-        //        PointsBalance = results.PointsBalance,
-        //        PointsAmount = results.PointsAmount
-        //    };
-
-        //    return Ok(loyaltyPointsDto);
-        //}
-
 
         [HttpPut]
         [Authorize]
@@ -55,11 +33,11 @@ namespace RMASystem.APIs.Controllers
                     return BadRequest(new GeneralResponse { Message = "Invalid request payload." });
                 }
 
-                var RetailCustomerFromDB =  _RetailCustomersManger.GetByPhone(RetailCustomerDto.Phone);
+                var RetailCustomerFromDB = _RetailCustomersManger.GetByPhone(RetailCustomerDto.Phone);
 
                 if (RetailCustomerFromDB is null)
                 {
-                    _RetailCustomersManger.Add(RetailCustomerDto);
+                   await _RetailCustomersManger.Add(RetailCustomerDto);
                     return Ok(new GeneralResponse { Message = "Created successfully" });
                 }
                 else
@@ -68,7 +46,7 @@ namespace RMASystem.APIs.Controllers
                     return Ok(new GeneralResponse { Message = "Updated successfully" });
                 }
 
-              
+
             }
             catch (Exception ex)
             {
@@ -78,8 +56,35 @@ namespace RMASystem.APIs.Controllers
             }
         }
 
+        [HttpGet("GetLoyaltyPoints")]
+        [Authorize]
+        public async Task<IActionResult> GetLoyaltyPoints(string phoneNo)
+        {
+            try
+            {
+                var results = await _RetailCustomersManger.GetLoyaltyPoints(phoneNo); 
+                if (results == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+              //  return StatusCode(500, new GeneralResponse { Message = "An error occurred while processing the request." });
+            }
 
 
 
+        }
+
+        
+
+
+
+      
     }
+
 }

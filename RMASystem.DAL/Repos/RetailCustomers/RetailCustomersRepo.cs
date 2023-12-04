@@ -1,4 +1,8 @@
 ﻿
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using System;
+
 namespace RMASystem.DAL
 {
     public class RetailCustomersRepo : IRetailCustomersRepo
@@ -19,9 +23,9 @@ namespace RMASystem.DAL
         {
             return _context.RetailCustomers.FirstOrDefault(x => x.Phone == phone);
         }
-        public void Add(RetailCustomers entity)
+        public async Task Add(RetailCustomers entity)
         {
-            _context.RetailCustomers.Add(entity);
+            await _context.RetailCustomers.AddAsync(entity);
 
         }
 
@@ -34,9 +38,43 @@ namespace RMASystem.DAL
             _context.RetailCustomers.Remove(entity);
         }
 
-        public int SaveChanges()
+        public async Task<int> SaveChanges()
         {
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
+        }
+        public async Task<RetailCustomers?> GetCustomerFromSP (string phone)
+        {
+            return  await _context.RetailCustomers.FirstOrDefaultAsync(C => C.Phone == phone);
+        }
+
+        public virtual async Task<List<CustomerPointsReadSPDto>?> GetLoyaltyPoints(string? PhoneNo, OutputParameter<int>? returnValueOut = null, CancellationToken cancellationToken = default)
+        {
+            var parameterreturnValue = new SqlParameter
+            {
+                ParameterName = "returnValue",
+                Direction = System.Data.ParameterDirection.Output,
+                SqlDbType = System.Data.SqlDbType.Int,
+            };
+
+            var sqlParameters = new[]
+            {
+            new SqlParameter
+            {
+                ParameterName = "PhoneNo",
+                Value = PhoneNo ?? Convert.DBNull,
+                SqlDbType = System.Data.SqlDbType.NVarChar,
+            },
+            parameterreturnValue,
+        };
+
+            var ReadSPFromDB = //line 75
+                await _context.SqlQueryAsync<CustomerPointsReadSPDto>(
+                    "EXEC @returnValue = [dbo].[GetRetailCustomerLoyaltyPoints] @PhoneNo",
+                    sqlParameters, cancellationToken);
+
+         //   returnValueOut?.SetValue(parameterreturnValue.Value);
+
+            return ReadSPFromDB;
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RMASystem.DAL;
 
@@ -11,9 +12,11 @@ using RMASystem.DAL;
 namespace RMASystem.DAL.Migrations
 {
     [DbContext(typeof(RMAContext))]
-    partial class RMAContextModelSnapshot : ModelSnapshot
+    [Migration("20231130122110_AddResultTableofSP")]
+    partial class AddResultTableofSP
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,7 +190,7 @@ namespace RMASystem.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("APIReceivedRequests", (string)null);
+                    b.ToTable("APIReceivedRequests");
                 });
 
             modelBuilder.Entity("RMASystem.DAL.ApplicationUser", b =>
@@ -308,7 +311,7 @@ namespace RMASystem.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LoyaltySetupDetails", (string)null);
+                    b.ToTable("LoyaltySetupDetails");
                 });
 
             modelBuilder.Entity("RMASystem.DAL.LoyaltySetupHeader", b =>
@@ -348,7 +351,7 @@ namespace RMASystem.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LoyaltySetupHeader", (string)null);
+                    b.ToTable("LoyaltySetupHeader");
                 });
 
             modelBuilder.Entity("RMASystem.DAL.RetailCustomerPointsStatement", b =>
@@ -412,7 +415,7 @@ namespace RMASystem.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RetailCustomerPointsStatement", (string)null);
+                    b.ToTable("RetailCustomerPointsStatement");
                 });
 
             modelBuilder.Entity("RMASystem.DAL.RetailCustomers", b =>
@@ -542,7 +545,7 @@ namespace RMASystem.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RetailCustomers", (string)null);
+                    b.ToTable("RetailCustomers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

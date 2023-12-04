@@ -6,9 +6,8 @@ namespace RMASystem.BL
     {
      //   List<RetailCustomerReadDto> GetAll();
         RetailCustomers? GetByPhone(string phone);
-        // GetRetailCustomerLoyaltyPointsDetails
-        int Add(RetailCustomerAddDto entity);
+        Task<int> Add(RetailCustomerAddDto entity);
         bool Update(RetailCustomerAddDto entity);
-        //  void Delete(RetailCustomers entity);
+        Task<List<CustomerPointsReadSPDto>?> GetLoyaltyPoints(string? PhoneNo, OutputParameter<int>? returnValue = null, CancellationToken cancellationToken = default);
     }
 }

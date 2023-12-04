@@ -17,7 +17,7 @@ namespace RMASystem.BL
             return _retailCustomerRepo.GetByPhone(phone);
         }
 
-        public int Add(RetailCustomerAddDto RetailCustomerDto)
+        public async Task<int> Add(RetailCustomerAddDto RetailCustomerDto)
         {
             RetailCustomers RetailCustomersToAdd = new()
             {
@@ -30,8 +30,8 @@ namespace RMASystem.BL
                 GENDER = RetailCustomerDto.Gender.ToLower() == "female" ? "F" : "M",
                 CustomerImage = Array.Empty<byte>()
             };
-            _retailCustomerRepo.Add(RetailCustomersToAdd);
-            _retailCustomerRepo.SaveChanges();
+            await _retailCustomerRepo.Add(RetailCustomersToAdd);
+            await _retailCustomerRepo.SaveChanges();
             return RetailCustomersToAdd.Id;
         }
 
@@ -39,7 +39,7 @@ namespace RMASystem.BL
         {
            var RetailCustomerFromDB = _retailCustomerRepo.GetByPhone(RetailCustomerDto.Phone);
 
-            RetailCustomerFromDB.CardCode = RetailCustomerDto.Code;
+            RetailCustomerFromDB!.CardCode = RetailCustomerDto.Code;
             RetailCustomerFromDB.NameL1 = RetailCustomerDto.Name;
             RetailCustomerFromDB.Phone = RetailCustomerDto.Phone;
             RetailCustomerFromDB.Address = RetailCustomerDto.Address;
@@ -52,6 +52,10 @@ namespace RMASystem.BL
             return true;
         }
 
+        public async Task<List<CustomerPointsReadSPDto>?> GetLoyaltyPoints(string? PhoneNo, OutputParameter<int>? returnValue, CancellationToken cancellationToken)
+        {
+            return await _retailCustomerRepo.GetLoyaltyPoints(PhoneNo, returnValue, cancellationToken); //line 57
+        }
 
     }
 }

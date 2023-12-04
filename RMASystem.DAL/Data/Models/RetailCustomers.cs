@@ -35,6 +35,6 @@
         public string Street{get;set;}=string.Empty;
         public string Apartment{get;set;}=string.Empty;
         public DateTime CardCodeExpiry{get;set;}
-        public byte[] CustomerImage{get;set;}
+        public byte[]? CustomerImage{get;set;}
     }
 }

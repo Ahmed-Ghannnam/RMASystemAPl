@@ -7,9 +7,7 @@ namespace RMASystem.DAL
         public int Id { get; set; }
         public string Body { get; set; } = string.Empty;
         public DateTime ReceivedDate { get; set; }
-
         public string UserName { get; set; } = string.Empty;
-
         public int ApiType { get; set; }
         public string ApiUrl { get; set; } = string.Empty;
         public string RequestMethod { get; set; } = string.Empty;
