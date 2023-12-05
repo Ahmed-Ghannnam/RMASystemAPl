@@ -12,7 +12,7 @@ using System.Text;
 
 namespace RMASystem.APIs
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {

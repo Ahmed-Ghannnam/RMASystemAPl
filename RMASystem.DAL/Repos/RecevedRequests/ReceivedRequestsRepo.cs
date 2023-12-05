@@ -15,18 +15,18 @@ namespace RMASystem.DAL
             _context = context;
         }
 
-        public void Add(APIReceivedRequests entity)
+        public async Task Add(ReceivedRequests entity)
         {
-            _context.Add(entity);
+           await _context.AddAsync(entity);
         }
 
-        public void Update(APIReceivedRequests entity)
+        public void Update(ReceivedRequests entity)
         {
             _context.Update(entity);
         }
-        public int SaveChanges()
+        public async Task<int> SaveChanges()
         {
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
     }
 }

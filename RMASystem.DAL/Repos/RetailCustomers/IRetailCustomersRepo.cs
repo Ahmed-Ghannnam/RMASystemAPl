@@ -6,7 +6,7 @@ namespace RMASystem.DAL
     public interface IRetailCustomersRepo
     {
         IEnumerable<RetailCustomers> GetAll();
-        RetailCustomers? GetByPhone(string phone);
+        Task<RetailCustomers?> GetByPhone(string phone);
        // GetRetailCustomerLoyaltyPointsDetails
         Task Add(RetailCustomers entity);
         void Update(RetailCustomers entity);

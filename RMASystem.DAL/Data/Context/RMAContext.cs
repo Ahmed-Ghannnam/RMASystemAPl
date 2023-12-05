@@ -9,7 +9,7 @@ namespace RMASystem.DAL
     public class RMAContext:IdentityDbContext<ApplicationUser>
     {
         public DbSet<RetailCustomers> RetailCustomers { get; set; }
-        public DbSet<APIReceivedRequests> APIReceivedRequests { get; set; }
+        public DbSet<ReceivedRequests> APIReceivedRequests { get; set; }
         public virtual DbSet<LoyaltySetupDetail> LoyaltySetupDetails { get; set; }
         public virtual DbSet<LoyaltySetupHeader> LoyaltySetupHeader { get; set; }
         public virtual DbSet<RetailCustomerPointsStatement> RetailCustomerPointsStatement { get; set; }
@@ -24,11 +24,11 @@ namespace RMASystem.DAL
         {
             base.OnModelCreating(modelBuilder);
 
-            // Map the type to the stored procedure result without creating a table
+            // Map the Entity to can use it with a context as Any Table,but without creating a table in DB
             modelBuilder.Entity<CustomerPointsReadSPDto>(e =>
             {
-                e.HasNoKey();
-                e.ToView("GetRetailCustomerLoyaltyPoints"); // or Replace with the actual stored procedure name
+                e.HasNoKey(); // to prevent from create a Table in DB
+                e.ToView("GetRetailCustomerLoyaltyPoints"); // Write null or the actual stored procedure name
             });
 
             // To change the table names in DB

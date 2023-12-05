@@ -9,11 +9,11 @@ namespace RMASystem.APIs;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DataController : ControllerBase
+public class TestController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public DataController(UserManager<ApplicationUser> userManager)
+    public TestController(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }

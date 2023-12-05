@@ -17,19 +17,19 @@ namespace RMASystem.BL
             _receivedRequestsRepo = receivedRequestsRepo;
         }
 
-        public void Add(APIReceivedRequests entity)
+        public async Task Add(ReceivedRequests entity)
         {
-            _receivedRequestsRepo.Add(entity);
-            _receivedRequestsRepo.SaveChanges();
+           await _receivedRequestsRepo.Add(entity);
+           await _receivedRequestsRepo.SaveChanges();
 
         }
 
 
 
-        public void Update(APIReceivedRequests entity)
+        public async Task Update(ReceivedRequests entity)
         {
             _receivedRequestsRepo.Update(entity);
-            _receivedRequestsRepo.SaveChanges();    
+            await _receivedRequestsRepo.SaveChanges();    
         }
 
     }

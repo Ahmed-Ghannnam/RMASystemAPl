@@ -19,9 +19,9 @@ namespace RMASystem.DAL
            return _context.RetailCustomers;
         }
 
-        public RetailCustomers? GetByPhone(string phone)
+        public async Task<RetailCustomers?> GetByPhone(string phone)
         {
-            return _context.RetailCustomers.FirstOrDefault(x => x.Phone == phone);
+            return await _context.RetailCustomers.FirstOrDefaultAsync(x => x.Phone == phone);
         }
         public async Task Add(RetailCustomers entity)
         {

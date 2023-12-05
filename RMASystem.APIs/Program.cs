@@ -7,6 +7,10 @@ using RMASystem.APIs;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+using System.Globalization;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,8 +49,8 @@ builder.Services.AddDbContext<RMAContext>(options =>
 
 builder.Services.AddScoped<IRetailCustomersRepo, RetailCustomersRepo>();
 builder.Services.AddScoped<IReceivedRequestsRepo, ReceivedRequestsRepo>();
-builder.Services.AddScoped<APIReceivedRequests>();
 builder.Services.AddScoped<IUserAuthRepo, UserAuthRepo>();
+builder.Services.AddScoped<ReceivedRequests>();
 
 #endregion
 
@@ -87,6 +91,37 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 //});
 
 //builder.Services.AddScoped<IUserTwoFactorTokenProvider<ApplicationUser>, PasswordResetTokenProvider>();
+
+#endregion
+
+#region Rate Limiting
+
+var fixedPolicy = "fixed";
+
+builder.Services.AddRateLimiter(Options =>
+{
+    Options.AddFixedWindowLimiter(policyName: fixedPolicy, options =>
+    {
+        options.PermitLimit = 4;
+        options.Window = TimeSpan.FromSeconds(12);
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        options.QueueLimit = 2;
+    });
+
+    Options.OnRejected = (context, cancellationToken) =>
+    {
+        if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+        {
+            context.HttpContext.Response.Headers.RetryAfter =
+                ((int)retryAfter.TotalSeconds).ToString(NumberFormatInfo.InvariantInfo);
+        }
+
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        context.HttpContext.Response.WriteAsync($"Too many requests. Please try again later .",cancellationToken);
+
+        return new ValueTask();
+    };
+});
 
 #endregion
 
@@ -138,6 +173,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseRateLimiter();
 
 app.UseCors("AllowAll");  
 
@@ -149,6 +185,6 @@ app.UseAuthorization();
 
 app.UseMiddleware<APIRequestsHandlers>(); // CustomMiddelware
 
-app.MapControllers();
+app.MapControllers().RequireRateLimiting(fixedPolicy); // will automatically run the policy against all controllers
 
 app.Run();

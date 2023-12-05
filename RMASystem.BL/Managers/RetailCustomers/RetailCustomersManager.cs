@@ -12,9 +12,9 @@ namespace RMASystem.BL
             _retailCustomerRepo = retailCustomerRepo;
         }
 
-        public RetailCustomers? GetByPhone(string phone)
+        public async Task<RetailCustomers?> GetByPhone(string phone)
         {
-            return _retailCustomerRepo.GetByPhone(phone);
+            return await _retailCustomerRepo.GetByPhone(phone);
         }
 
         public async Task<int> Add(RetailCustomerAddDto RetailCustomerDto)
@@ -35,9 +35,9 @@ namespace RMASystem.BL
             return RetailCustomersToAdd.Id;
         }
 
-        public bool Update(RetailCustomerAddDto RetailCustomerDto)
+        public async Task<bool> Update(RetailCustomerAddDto RetailCustomerDto)
         {
-           var RetailCustomerFromDB = _retailCustomerRepo.GetByPhone(RetailCustomerDto.Phone);
+           var RetailCustomerFromDB = await _retailCustomerRepo.GetByPhone(RetailCustomerDto.Phone);
 
             RetailCustomerFromDB!.CardCode = RetailCustomerDto.Code;
             RetailCustomerFromDB.NameL1 = RetailCustomerDto.Name;
@@ -48,7 +48,7 @@ namespace RMASystem.BL
             RetailCustomerFromDB.GENDER = RetailCustomerDto.Gender.ToLower() == "female" ? "F" : "M";
 
             _retailCustomerRepo.Update(RetailCustomerFromDB);
-            _retailCustomerRepo.SaveChanges();
+            await _retailCustomerRepo.SaveChanges();
             return true;
         }
 

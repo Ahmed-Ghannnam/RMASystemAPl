@@ -8,20 +8,20 @@ using RMASystem.DAL;
 
 namespace RMASystem.APIs.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class RetailCustomersController : ControllerBase
     {
         private readonly IRetailCustomersManager _RetailCustomersManger;
         private readonly ILogger<RetailCustomersController> _logger;
 
-        public RetailCustomersController(IRetailCustomersManager RetailCustomersManger, ILogger<RetailCustomersController> logger, RMAContext context)
+        public RetailCustomersController(IRetailCustomersManager RetailCustomersManger, ILogger<RetailCustomersController> logger)
         {
             _RetailCustomersManger = RetailCustomersManger;
             _logger = logger;
         }
 
-        [HttpPut]
+        [HttpPut("AddOrUpdate")]
         [Authorize]
         public async Task<ActionResult> AddOrUpdate(RetailCustomerAddDto RetailCustomerDto)
         {
@@ -33,7 +33,7 @@ namespace RMASystem.APIs.Controllers
                     return BadRequest(new GeneralResponse { Message = "Invalid request payload." });
                 }
 
-                var RetailCustomerFromDB = _RetailCustomersManger.GetByPhone(RetailCustomerDto.Phone);
+                var RetailCustomerFromDB = await _RetailCustomersManger.GetByPhone(RetailCustomerDto.Phone);
 
                 if (RetailCustomerFromDB is null)
                 {
@@ -42,7 +42,7 @@ namespace RMASystem.APIs.Controllers
                 }
                 else
                 {
-                    _RetailCustomersManger.Update(RetailCustomerDto);
+                    await _RetailCustomersManger.Update(RetailCustomerDto);
                     return Ok(new GeneralResponse { Message = "Updated successfully" });
                 }
 
@@ -52,7 +52,6 @@ namespace RMASystem.APIs.Controllers
             {
                 _logger.LogError(ex, "An error occurred while processing the request.");
                 return StatusCode(500, new GeneralResponse { Message = "An error occurred while processing the request." });
-                throw;
             }
         }
 
@@ -70,10 +69,10 @@ namespace RMASystem.APIs.Controllers
 
                 return Ok(results);
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
-              //  return StatusCode(500, new GeneralResponse { Message = "An error occurred while processing the request." });
+                throw;
+                //  return StatusCode(500, new GeneralResponse { Message = "An error occurred while processing the request." });
             }
 
 

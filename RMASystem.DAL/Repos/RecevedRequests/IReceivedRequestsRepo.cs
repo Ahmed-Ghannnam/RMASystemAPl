@@ -8,9 +8,9 @@ namespace RMASystem.DAL
 {
     public interface IReceivedRequestsRepo
     {
-        void Add(APIReceivedRequests entity);
-        void Update(APIReceivedRequests entity);
-        int SaveChanges();
+        Task Add(ReceivedRequests entity);
+        void Update(ReceivedRequests entity);
+        Task<int> SaveChanges();
 
 
     }
