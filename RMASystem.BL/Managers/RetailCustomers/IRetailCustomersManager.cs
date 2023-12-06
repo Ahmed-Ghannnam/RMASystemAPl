@@ -5,9 +5,9 @@ namespace RMASystem.BL
     public interface IRetailCustomersManager
     {
      //   List<RetailCustomerReadDto> GetAll();
-        Task<RetailCustomers?> GetByPhone(string phone);
-        Task<int> Add(RetailCustomerAddDto entity);
-        Task<bool> Update(RetailCustomerAddDto entity);
-        Task<List<CustomerPointsReadSPDto>?> GetLoyaltyPoints(string? PhoneNo, OutputParameter<int>? returnValue = null, CancellationToken cancellationToken = default);
+        Task<RetailCustomers?> GetByPhoneAsync(string phone);
+        Task<int> AddAsync(RetailCustomerAddDto entity);
+        Task<bool> UpdateAsync(RetailCustomerAddDto entity);
+        Task<List<CustomerPointsReadSPDto>?> GetLoyaltyPointsAsync(string? PhoneNo, OutputParameter<int>? returnValue = null, CancellationToken cancellationToken = default);
     }
 }

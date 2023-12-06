@@ -108,7 +108,7 @@ builder.Services.AddRateLimiter(Options =>
         options.QueueLimit = 2;
     });
 
-    Options.OnRejected = (context, cancellationToken) =>
+    Options.OnRejected = async (context, cancellationToken) =>
     {
         if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
         {
@@ -117,9 +117,8 @@ builder.Services.AddRateLimiter(Options =>
         }
 
         context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-        context.HttpContext.Response.WriteAsync($"Too many requests. Please try again later .",cancellationToken);
+        await context.HttpContext.Response.WriteAsync($"Too many requests. Please try again later .",cancellationToken);
 
-        return new ValueTask();
     };
 });
 

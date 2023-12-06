@@ -16,14 +16,14 @@ namespace RMASystem.DAL
 
         public IEnumerable<RetailCustomers> GetAll()
         {
-           return _context.RetailCustomers;
+           return _context.RetailCustomers.AsNoTracking();
         }
 
-        public async Task<RetailCustomers?> GetByPhone(string phone)
+        public async Task<RetailCustomers?> GetByPhoneAsync(string phone)
         {
             return await _context.RetailCustomers.FirstOrDefaultAsync(x => x.Phone == phone);
         }
-        public async Task Add(RetailCustomers entity)
+        public async Task AddAsync(RetailCustomers entity)
         {
             await _context.RetailCustomers.AddAsync(entity);
 
@@ -38,16 +38,13 @@ namespace RMASystem.DAL
             _context.RetailCustomers.Remove(entity);
         }
 
-        public async Task<int> SaveChanges()
+        public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
         }
-        public async Task<RetailCustomers?> GetCustomerFromSP (string phone)
-        {
-            return  await _context.RetailCustomers.FirstOrDefaultAsync(C => C.Phone == phone);
-        }
+      
 
-        public virtual async Task<List<CustomerPointsReadSPDto>?> GetLoyaltyPoints(string? PhoneNo, OutputParameter<int>? returnValueOut = null, CancellationToken cancellationToken = default)
+        public virtual async Task<List<CustomerPointsReadSPDto>?> GetLoyaltyPointsAsync(string? PhoneNo, OutputParameter<int>? returnValueOut = null, CancellationToken cancellationToken = default)
         {
             var parameterreturnValue = new SqlParameter
             {
@@ -67,7 +64,7 @@ namespace RMASystem.DAL
             parameterreturnValue,
         };
 
-            var ReadSPFromDB = //line 75
+            var ReadSPFromDB = 
                 await _context.SqlQueryAsync<CustomerPointsReadSPDto>(
                     "EXEC @returnValue = [dbo].[GetRetailCustomerLoyaltyPoints] @PhoneNo",
                     sqlParameters, cancellationToken);

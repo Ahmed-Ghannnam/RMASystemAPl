@@ -5,7 +5,7 @@ namespace RMASystem.BL
 {
     public interface IReceivedRequestsManager
     {
-        Task Add(ReceivedRequests entity);
-        Task Update(ReceivedRequests entity);
+        Task AddAsync(ReceivedRequests entity);
+        Task UpdateAsync(ReceivedRequests entity);
     }
 }

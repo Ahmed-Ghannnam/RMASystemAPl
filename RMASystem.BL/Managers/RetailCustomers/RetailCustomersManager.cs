@@ -12,12 +12,12 @@ namespace RMASystem.BL
             _retailCustomerRepo = retailCustomerRepo;
         }
 
-        public async Task<RetailCustomers?> GetByPhone(string phone)
+        public async Task<RetailCustomers?> GetByPhoneAsync(string phone)
         {
-            return await _retailCustomerRepo.GetByPhone(phone);
+            return await _retailCustomerRepo.GetByPhoneAsync(phone);
         }
 
-        public async Task<int> Add(RetailCustomerAddDto RetailCustomerDto)
+        public async Task<int> AddAsync(RetailCustomerAddDto RetailCustomerDto)
         {
             RetailCustomers RetailCustomersToAdd = new()
             {
@@ -30,14 +30,14 @@ namespace RMASystem.BL
                 GENDER = RetailCustomerDto.Gender.ToLower() == "female" ? "F" : "M",
                 CustomerImage = Array.Empty<byte>()
             };
-            await _retailCustomerRepo.Add(RetailCustomersToAdd);
-            await _retailCustomerRepo.SaveChanges();
+            await _retailCustomerRepo.AddAsync(RetailCustomersToAdd);
+            await _retailCustomerRepo.SaveChangesAsync();
             return RetailCustomersToAdd.Id;
         }
 
-        public async Task<bool> Update(RetailCustomerAddDto RetailCustomerDto)
+        public async Task<bool> UpdateAsync(RetailCustomerAddDto RetailCustomerDto)
         {
-           var RetailCustomerFromDB = await _retailCustomerRepo.GetByPhone(RetailCustomerDto.Phone);
+           var RetailCustomerFromDB = await _retailCustomerRepo.GetByPhoneAsync(RetailCustomerDto.Phone);
 
             RetailCustomerFromDB!.CardCode = RetailCustomerDto.Code;
             RetailCustomerFromDB.NameL1 = RetailCustomerDto.Name;
@@ -48,13 +48,13 @@ namespace RMASystem.BL
             RetailCustomerFromDB.GENDER = RetailCustomerDto.Gender.ToLower() == "female" ? "F" : "M";
 
             _retailCustomerRepo.Update(RetailCustomerFromDB);
-            await _retailCustomerRepo.SaveChanges();
+            await _retailCustomerRepo.SaveChangesAsync();
             return true;
         }
 
-        public async Task<List<CustomerPointsReadSPDto>?> GetLoyaltyPoints(string? PhoneNo, OutputParameter<int>? returnValue, CancellationToken cancellationToken)
+        public async Task<List<CustomerPointsReadSPDto>?> GetLoyaltyPointsAsync(string? PhoneNo, OutputParameter<int>? returnValue, CancellationToken cancellationToken)
         {
-            return await _retailCustomerRepo.GetLoyaltyPoints(PhoneNo, returnValue, cancellationToken); //line 57
+            return await _retailCustomerRepo.GetLoyaltyPointsAsync(PhoneNo, returnValue, cancellationToken); 
         }
 
     }

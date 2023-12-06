@@ -12,41 +12,41 @@ namespace RMASystem.DAL
         public string ApiUrl { get; set; } = string.Empty;
         public string RequestMethod { get; set; } = string.Empty;
 
-        private static readonly Dictionary<string, API_TYPE> UrlToApiTypeMap = new()
+        private static readonly Dictionary<string, Api_Type> UrlToApiTypeMapDic = new()
         {
-            { "/RetailCustomers/AddOrUpdate", API_TYPE.ADD_UPDATE_RETAIL_CUSTOMER },
-            { "/RetailCustomers/GetLoyaltyPoints", API_TYPE.GET_RETAIL_CUSTOMER_LOYALTY_POINTS },
-            { "/Users/register", API_TYPE.REGISTER },
-            { "/Users/Login", API_TYPE.LOGIN },
-            { "/Users/changePassword", API_TYPE.CHANGE_PASSWORD },
-            { "/Users/RequestPasswordReset", API_TYPE.REQUEST_PASSWORD_RESET },
-            { "/Users/ResetPassword", API_TYPE.RESET_PASSWORD },
+            { "/retailcustomers/addorupdate", Api_Type.AddUpdateRetailCustomer },
+            { "/retailcustomers/getloyaltyoints", Api_Type.GetRetailCustomerLoyaltyPoints },
+            { "/users/register", Api_Type.Register },
+            { "/users/login", Api_Type.Login },
+            { "/users/changepassword", Api_Type.ChangePassword },
+            { "/users/requestpasswordreset", Api_Type.RequestPasswordReset },
+            { "/users/resetpassword", Api_Type.ResetPassword },
 
         };
 
         public void SetApiType()
         {
-            if (UrlToApiTypeMap.TryGetValue(ApiUrl, out var apiType))
+            if (UrlToApiTypeMapDic.TryGetValue(ApiUrl, out var apiType))
             {
                 ApiType = (int)apiType;
             }
             else
             {
-                ApiType = (int)API_TYPE.UNKNOWN;
+                ApiType = (int)Api_Type.Unknown;
             }
         }
 
     }
-    public enum API_TYPE
+    public enum Api_Type
     {
-        REGISTER = 0,
-        LOGIN = 1,
-        CHANGE_PASSWORD = 2,
-        REQUEST_PASSWORD_RESET=3,
-        RESET_PASSWORD= 4,
-        ADD_UPDATE_RETAIL_CUSTOMER = 5,
-        GET_RETAIL_CUSTOMER_LOYALTY_POINTS = 6,
-        UNKNOWN = -1
+        Register = 0,
+        Login = 1,
+        ChangePassword = 2,
+        RequestPasswordReset = 3,
+        ResetPassword = 4,
+        AddUpdateRetailCustomer = 5,
+        GetRetailCustomerLoyaltyPoints = 6,
+        Unknown = -1
     }
 
 }

@@ -6,14 +6,13 @@ namespace RMASystem.DAL
     public interface IRetailCustomersRepo
     {
         IEnumerable<RetailCustomers> GetAll();
-        Task<RetailCustomers?> GetByPhone(string phone);
+        Task<RetailCustomers?> GetByPhoneAsync(string phone);
        // GetRetailCustomerLoyaltyPointsDetails
-        Task Add(RetailCustomers entity);
+        Task AddAsync(RetailCustomers entity);
         void Update(RetailCustomers entity);
         void Delete(RetailCustomers entity);
-        Task<int> SaveChanges();
-        Task<List<CustomerPointsReadSPDto>?> GetLoyaltyPoints(string? PhoneNo, OutputParameter<int>? returnValue , CancellationToken cancellationToken = default);
+        Task<int> SaveChangesAsync();
+        Task<List<CustomerPointsReadSPDto>?> GetLoyaltyPointsAsync(string? PhoneNo, OutputParameter<int>? returnValue , CancellationToken cancellationToken = default);
 
-        Task<RetailCustomers?> GetCustomerFromSP(string phone);
     }
 }

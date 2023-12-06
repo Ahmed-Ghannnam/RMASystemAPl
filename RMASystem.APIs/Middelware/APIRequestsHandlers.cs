@@ -10,29 +10,27 @@ namespace RMASystem.APIs
     public class APIRequestsHandlers
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<APIRequestsHandlers> _logger;
 
-        public APIRequestsHandlers(RequestDelegate next, ILogger<APIRequestsHandlers> logger)
+        public APIRequestsHandlers(RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
             
                 var UserNameFromClaims = context.User.FindFirstValue(ClaimTypes.Name);
-
+            var _apiRequest = new ReceivedRequests();
             // for this error message Unable to resolve service from root(middelware), you have to use lines of code below  instead of injecting in constructor or Create obj
             using (var scope = context.RequestServices.CreateScope())
             {
-                var _apiRequest = scope.ServiceProvider.GetRequiredService<ReceivedRequests>();
+               // var _apiRequest = scope.ServiceProvider.GetRequiredService<ReceivedRequests>();
                 var _receivedRequestsManager = scope.ServiceProvider.GetRequiredService<IReceivedRequestsManager>();
 
                 
                 _apiRequest.UserName = UserNameFromClaims ?? string.Empty;
                 _apiRequest.ReceivedDate = DateTime.Now;
-                _apiRequest.ApiUrl = context.Request.Path;
+                _apiRequest.ApiUrl = context.Request.Path.ToString().ToLower();
                 _apiRequest.RequestMethod = context.Request.Method;
 
                 if (context.Request.ContentLength > 0)
@@ -45,14 +43,16 @@ namespace RMASystem.APIs
 
                     context.Request.Body.Position = 0;  // Reset the position so other components can read the body
                 }
+
                  _apiRequest.SetApiType();
+
                 try
                 {
-                   await _receivedRequestsManager.Add(_apiRequest);
+                   await _receivedRequestsManager.AddAsync(_apiRequest);
                 }
                 catch
                 {
-                    _logger.LogInformation($"An error occured when inserting API Received Request in DB");
+                    throw;
                 }
             }
             await _next(context);

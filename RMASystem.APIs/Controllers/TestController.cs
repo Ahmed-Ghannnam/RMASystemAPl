@@ -23,7 +23,7 @@ public class TestController : ControllerBase
     public async Task<ActionResult> GetSecuredData()
     {
         //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var UserName = User.FindFirstValue(ClaimTypes.Name);
+       // var UserName = User.FindFirstValue(ClaimTypes.Name);
 
         //Employee? userFromDb = await _userManager.FindByIdAsync(userId);
 
@@ -74,7 +74,7 @@ public class TestController : ControllerBase
     [HttpGet]
     [Route("ForAuth")]
     [Authorize]
-    public ActionResult GetSecureDataForAll()
+    public ActionResult GetSecureDataForAuth()
     {
         return Ok(new
         {

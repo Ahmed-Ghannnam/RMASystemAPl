@@ -44,7 +44,7 @@ namespace RMASystem.BL
             // create claims
             var claims = new List<Claim>
             {
-            // put Id of user after created in NameIdentifier prop to return user again by FindByNameAsync Method
+            // put Id of user after created in NameIdentifier prop to can return user again by FindByNameAsync Method
             new Claim(ClaimTypes.NameIdentifier, newUser.Id),
             new Claim(ClaimTypes.Name, registrDto.UserName),
             new Claim(ClaimTypes.Role, "User")
@@ -95,7 +95,7 @@ namespace RMASystem.BL
             var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
             //Putting All together
-            var expiry = DateTime.Now.AddMinutes(15);
+            var expiry = DateTime.Now.AddMinutes(30);
             var jwt = new JwtSecurityToken(
                 expires: expiry,
                 claims: claimsList,

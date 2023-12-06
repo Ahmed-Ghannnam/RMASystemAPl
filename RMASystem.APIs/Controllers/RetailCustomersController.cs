@@ -33,16 +33,16 @@ namespace RMASystem.APIs.Controllers
                     return BadRequest(new GeneralResponse { Message = "Invalid request payload." });
                 }
 
-                var RetailCustomerFromDB = await _RetailCustomersManger.GetByPhone(RetailCustomerDto.Phone);
+                var RetailCustomerFromDB = await _RetailCustomersManger.GetByPhoneAsync(RetailCustomerDto.Phone);
 
                 if (RetailCustomerFromDB is null)
                 {
-                   await _RetailCustomersManger.Add(RetailCustomerDto);
+                   await _RetailCustomersManger.AddAsync(RetailCustomerDto);
                     return Ok(new GeneralResponse { Message = "Created successfully" });
                 }
                 else
                 {
-                    await _RetailCustomersManger.Update(RetailCustomerDto);
+                    await _RetailCustomersManger.UpdateAsync(RetailCustomerDto);
                     return Ok(new GeneralResponse { Message = "Updated successfully" });
                 }
 
@@ -61,7 +61,7 @@ namespace RMASystem.APIs.Controllers
         {
             try
             {
-                var results = await _RetailCustomersManger.GetLoyaltyPoints(phoneNo); 
+                var results = await _RetailCustomersManger.GetLoyaltyPointsAsync(phoneNo); 
                 if (results == null)
                 {
                     return NotFound();

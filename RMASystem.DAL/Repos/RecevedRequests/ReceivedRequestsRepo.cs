@@ -15,7 +15,7 @@ namespace RMASystem.DAL
             _context = context;
         }
 
-        public async Task Add(ReceivedRequests entity)
+        public async Task AddAsync(ReceivedRequests entity)
         {
            await _context.AddAsync(entity);
         }
@@ -24,7 +24,7 @@ namespace RMASystem.DAL
         {
             _context.Update(entity);
         }
-        public async Task<int> SaveChanges()
+        public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
         }
