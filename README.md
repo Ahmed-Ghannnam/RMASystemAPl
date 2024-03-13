@@ -10,8 +10,8 @@ Technologies Used:
 - SQL Server
 
 Installation Instructions:
-1. Clone the repository: git clone https://github.com/yourusername/your-repo.git.
-2. Navigate to the project directory: cd your-repo
+1. Clone the repository: git clone https://github.com/Ahmed-Ghannnam/RMASystemAPl/tree/master
+2. Navigate to the project directory: cd RMASystemAPl
 3. Install dependencies: dotnet restore
 
 Running the Project:
